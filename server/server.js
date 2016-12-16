@@ -5,6 +5,8 @@ var config = require('./config/config');
 var mongoose = require('mongoose');  
 var morgan = require('morgan');
 var bodyParser = require('body-parser');
+
+var userRouter = require('./api/user/userRoutes');
 // connect to mongoDB database 
 mongoose.connect(config.db.url);
 //Set - up global middleware
@@ -19,6 +21,16 @@ mongoose.connect(config.db.url);
 //JavaScript file (server.js).
 // So  move the routes-related code 
 //into  api module .
+
+
+app.use(function(err, req, res, next) {
+  if (err) {
+    console.log(err.message);
+    res.status(500).send(err);
+  }
+});
+
+app.use('/users', userRouter)
 app.use('/api/', api);
 
 // API endpoints such as below has been moved to user Router within api module
